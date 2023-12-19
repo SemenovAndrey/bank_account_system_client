@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.mai.information_system.controller.AuthorizationController">
+    <tabs>
+        <Tab fx:id="tabAuthorization" text="Авторизация">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Label layoutX="247.0" layoutY="30.0" text="Авторизация">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="80.0" layoutY="75.0" text="Почта">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="80.0" layoutY="160.0" text="Пароль">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Button fx:id="buttonEnter" layoutX="269.0" layoutY="266.0" mnemonicParsing="false" onAction="#enter" text="Войти">
+                            <font>
+                                <Font size="15.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="supportButtonAuth" layoutX="224.0" layoutY="315.0" mnemonicParsing="false" onAction="#writeSupportMessage" text="Связь с поддержкой">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                        <TextField fx:id="emailInputAuthorization" layoutX="80.0" layoutY="105.0" prefHeight="26.0" prefWidth="441.0" />
+                        <PasswordField fx:id="passwordInputAuthorization" layoutX="80.0" layoutY="190.0" prefHeight="26.0" prefWidth="441.0" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab fx:id="tabRegistration" text="Регистрация">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <children>
+                        <Label layoutX="248.0" layoutY="25.0" text="Регистрация">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="80.0" layoutY="135.0" text="Почта">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="80.0" layoutY="200.0" text="Пароль">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Button fx:id="buttonRegistration" layoutX="220.0" layoutY="279.0" mnemonicParsing="false" onAction="#register" text="Зарегистрироваться">
+                            <font>
+                                <Font size="15.0" />
+                            </font>
+                        </Button>
+                        <Button fx:id="supportButtonReg" layoutX="225.0" layoutY="323.0" mnemonicParsing="false" onAction="#writeSupportMessage" text="Связь с поддержкой">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                        <TextField fx:id="passwordInputRegistration" layoutX="80.0" layoutY="165.0" prefHeight="26.0" prefWidth="441.0" />
+                        <Label layoutX="80.0" layoutY="60.0" text="Имя">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="nameInputRegistration" layoutX="80.0" layoutY="90.0" prefHeight="26.0" prefWidth="441.0" />
+                        <PasswordField fx:id="emailInputRegistration" layoutX="80.0" layoutY="230.0" prefHeight="26.0" prefWidth="441.0" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>
