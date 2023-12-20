@@ -39,4 +39,20 @@ public class BankAccountTypes {
                 ", type='" + type + '\'' +
                 '}';
     }
+
+    public static String[] getBankAccountTypes(String response) {
+        int numberOfBankAccountTypes = 4;
+        String[] bankAccountTypes = new String[numberOfBankAccountTypes];
+
+        String[] arrayOfTypes = response.split("}");
+        for (int i = 0; i < arrayOfTypes.length - 1; i++) {
+            if (i == 0) {
+                bankAccountTypes[i] = arrayOfTypes[i].substring(29, arrayOfTypes[i].length() - 1);
+            } else {
+                bankAccountTypes[i] = arrayOfTypes[i].substring(30, arrayOfTypes[i].length() - 1);
+            }
+        }
+
+        return bankAccountTypes;
+    }
 }

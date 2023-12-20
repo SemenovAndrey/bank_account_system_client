@@ -1,5 +1,7 @@
 package ru.mai.information_system.dto;
 
+import java.time.LocalDate;
+
 public class BankAccount {
 
     private int id;
@@ -11,21 +13,21 @@ public class BankAccount {
 
     public BankAccount() {}
 
-    public BankAccount(String name, int userId, int bankAccountTypeId, String creationDate, double balance) {
+    public BankAccount(String name, int userId, int bankAccountTypeId) {
         this.name = name;
         this.userId = userId;
         this.bankAccountTypeId = bankAccountTypeId;
-        this.creationDate = creationDate;
-        this.balance = balance;
+        this.creationDate = LocalDate.now().toString();
+        this.balance = 0;
     }
 
-    public BankAccount(int id, String name, int userId, int bankAccountTypeId, String creationDate, double balance) {
+    public BankAccount(int id, String name, int userId, int bankAccountTypeId) {
         this.id = id;
         this.name = name;
         this.userId = userId;
         this.bankAccountTypeId = bankAccountTypeId;
-        this.creationDate = creationDate;
-        this.balance = balance;
+        this.creationDate = LocalDate.now().toString();
+        this.balance = 0;
     }
 
     public int getId() {

@@ -3,19 +3,19 @@ package ru.mai.information_system.controller;
 import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import ru.mai.information_system.App;
 import ru.mai.information_system.communication.Communication;
 import ru.mai.information_system.communication.Url;
 import ru.mai.information_system.dto.User;
 
 import java.io.IOException;
+
+import static ru.mai.information_system.controller.NewStageOpener.closeWindow;
+import static ru.mai.information_system.controller.NewStageOpener.openNewStage;
 
 public class AuthorizationController {
 
@@ -57,10 +57,10 @@ public class AuthorizationController {
         String email = emailInputAuthorization.getText();
         String password = passwordInputAuthorization.getText();
 
-        if (email.equals("")) {
+        if (email.isEmpty()) {
             System.out.println("Field email empty");
             return;
-        } else if (password.equals("")) {
+        } else if (password.isEmpty()) {
             System.out.println("Field password empty");
             return;
         }
@@ -98,13 +98,13 @@ public class AuthorizationController {
         String email = emailInputRegistration.getText();
         String password = passwordInputRegistration.getText();
 
-        if (name.equals("")) {
+        if (name.isEmpty()) {
             System.out.println("Field name empty");
             return;
-        } else if (email.equals("")) {
+        } else if (email.isEmpty()) {
             System.out.println("Field email empty");
             return;
-        } else if (password.equals("")) {
+        } else if (password.isEmpty()) {
             System.out.println("Field password empty");
             return;
         }
@@ -135,36 +135,5 @@ public class AuthorizationController {
         String file = "support-view.fxml";
         String title = "Поддержка";
         openNewStage(file, title);
-    }
-
-    private void closeWindow(Button button) {
-        Stage stage = (Stage) button.getScene().getWindow();
-        stage.hide();
-    }
-
-    private void openNewStage(String fxmlFile, String title) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxmlFile));
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.setTitle("Система учета личных финансов: " + title);
-            stage.setScene(new Scene(fxmlLoader.load()));
-            stage.show();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void openNewStage(String fxmlFile) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxmlFile));
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.setTitle("Система учета личных финансов");
-            stage.setScene(new Scene(fxmlLoader.load()));
-            stage.show();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

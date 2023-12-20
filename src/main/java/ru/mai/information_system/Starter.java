@@ -3,17 +3,22 @@ package ru.mai.information_system;
 import com.google.gson.Gson;
 import ru.mai.information_system.communication.Communication;
 import ru.mai.information_system.communication.Url;
+import ru.mai.information_system.dto.BankAccountTypes;
 import ru.mai.information_system.dto.User;
+
+import java.io.IOException;
 
 public class Starter {
 
     public static void main(String[] args) {
         App.main(args);
+
+//        test();
     }
 
     private static void test() {
-//        Communication communication = new Communication();
-//        String url = Url.getUsersUrl();
+        String url = Url.getUsersUrl();
+
 //
 //        try {
 //            System.out.println("GET: " + communication.sendGetRequest(url));

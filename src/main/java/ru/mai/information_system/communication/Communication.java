@@ -14,24 +14,24 @@ public class Communication {
         return sendResponse(connection);
     }
 
-    public static String sendPostRequest(String url, String user) throws IOException {
+    public static String sendPostRequest(String url, String data) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setDoOutput(true);
 
-        writeData(connection, user);
+        writeData(connection, data);
 
         return sendResponse(connection);
     }
 
-    public static String sendPutRequest(String url, String user) throws IOException {
+    public static String sendPutRequest(String url, String data) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("PUT");
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setDoOutput(true);
 
-        writeData(connection, user);
+        writeData(connection, data);
 
         return sendResponse(connection);
     }

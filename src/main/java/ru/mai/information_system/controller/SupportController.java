@@ -16,6 +16,8 @@ import ru.mai.information_system.dto.Support;
 
 import java.io.IOException;
 
+import static ru.mai.information_system.controller.NewStageOpener.closeWindow;
+
 public class SupportController {
 
     @FXML
@@ -32,10 +34,10 @@ public class SupportController {
         String email = emailInput.getText();
         String message = messageInput.getText();
 
-        if (email.equals("")) {
+        if (email.isEmpty()) {
             System.out.println("Email field empty");
             return;
-        } else if (message.equals("")) {
+        } else if (message.isEmpty()) {
             System.out.println("Message field empty");
             return;
         }
@@ -48,25 +50,6 @@ public class SupportController {
             System.out.println(e.getMessage());
         }
 
-        closeSupportWindow();
-    }
-
-    private void closeSupportWindow() {
-        Stage stage = (Stage) buttonSendMessage.getScene().getWindow();
-        stage.close();
-    }
-
-    private void openAuthorizationWindow() {
-        closeSupportWindow();
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("authorization-window-view.fxml"));
-            Stage stage = new Stage();
-            stage.setResizable(false);
-            stage.setTitle("Система учета личных финансов: Авторизация");
-            stage.setScene(new Scene(fxmlLoader.load()));
-            stage.show();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        closeWindow(buttonSendMessage);
     }
 }
