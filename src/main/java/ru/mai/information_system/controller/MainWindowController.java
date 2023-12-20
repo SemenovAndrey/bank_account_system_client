@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
+import ru.mai.information_system.communication.Communication;
 
 public class MainWindowController {
 
@@ -24,17 +25,17 @@ public class MainWindowController {
     private Button supportButton;
 
     @FXML
-    public void addBankAccount(ActionEvent event) {
+    void addBankAccount(ActionEvent event) {
 
     }
 
     @FXML
-    public void quit(ActionEvent event) {
+    void quit(ActionEvent event) {
 
     }
 
     @FXML
-    public void writeSupportMessage(ActionEvent event) {
+    void writeSupportMessage(ActionEvent event) {
 
     }
 }

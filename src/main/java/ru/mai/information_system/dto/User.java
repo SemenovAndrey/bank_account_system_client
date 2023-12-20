@@ -63,4 +63,28 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    public static User convertFromString(String response) {
+        if (!response.startsWith("User")) {
+            return null;
+        }
+
+        if (!Character.toString(response.charAt(4)).equals("{")) {
+            return null;
+        }
+
+        String strArray = response.substring(5, response.length() - 1);
+        String[] infoAboutUser = strArray.split(", ");
+        String[] userStr = new String[infoAboutUser.length];
+        for (int i = 0; i < infoAboutUser.length; i++) {
+            userStr[i] = infoAboutUser[i].split("=")[1].replace("'", "");
+        }
+
+        int id = Integer.parseInt(userStr[0]);
+        String name = userStr[1];
+        String email = userStr[2];
+        String password = userStr[3];
+
+        return new User(id, name, email, password);
+    }
 }

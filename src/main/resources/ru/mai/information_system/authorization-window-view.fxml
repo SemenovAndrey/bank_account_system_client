@@ -10,7 +10,10 @@
 <?import javafx.scene.text.Font?>
 
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.mai.information_system.controller.AuthorizationController">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+         prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/19"
+         xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="ru.mai.information_system.controller.AuthorizationController">
     <tabs>
         <Tab fx:id="tabAuthorization" text="Авторизация">
             <content>
@@ -41,8 +44,8 @@
                                 <Font size="14.0" />
                             </font>
                         </Button>
-                        <TextField fx:id="emailInputAuthorization" layoutX="80.0" layoutY="105.0" prefHeight="26.0" prefWidth="441.0" />
-                        <PasswordField fx:id="passwordInputAuthorization" layoutX="80.0" layoutY="190.0" prefHeight="26.0" prefWidth="441.0" />
+                        <TextField fx:id="emailInputAuthorization" layoutX="80.0" layoutY="105.0" prefHeight="26.0" prefWidth="441.0" promptText="email@gmail.com" />
+                        <PasswordField fx:id="passwordInputAuthorization" layoutX="80.0" layoutY="190.0" prefHeight="26.0" prefWidth="441.0" promptText="password" />
                     </children>
                 </AnchorPane>
             </content>
@@ -76,14 +79,14 @@
                                 <Font size="14.0" />
                             </font>
                         </Button>
-                        <TextField fx:id="passwordInputRegistration" layoutX="80.0" layoutY="165.0" prefHeight="26.0" prefWidth="441.0" />
+                        <TextField fx:id="emailInputRegistration" layoutX="80.0" layoutY="165.0" prefHeight="26.0" prefWidth="441.0" promptText="email@gmail.com" />
                         <Label layoutX="80.0" layoutY="60.0" text="Имя">
                             <font>
                                 <Font size="16.0" />
                             </font>
                         </Label>
-                        <TextField fx:id="nameInputRegistration" layoutX="80.0" layoutY="90.0" prefHeight="26.0" prefWidth="441.0" />
-                        <PasswordField fx:id="emailInputRegistration" layoutX="80.0" layoutY="230.0" prefHeight="26.0" prefWidth="441.0" />
+                        <TextField fx:id="nameInputRegistration" layoutX="80.0" layoutY="90.0" prefHeight="26.0" prefWidth="441.0" promptText="Ivan" />
+                        <PasswordField fx:id="passwordInputRegistration" layoutX="80.0" layoutY="230.0" prefHeight="26.0" prefWidth="441.0" promptText="password" />
                     </children>
                 </AnchorPane>
             </content>
