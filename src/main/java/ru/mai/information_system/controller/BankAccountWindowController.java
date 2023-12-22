@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 
+import static ru.mai.information_system.App.dropCurrentBankAccount;
 import static ru.mai.information_system.controller.NewStageOpener.closeWindow;
 import static ru.mai.information_system.controller.NewStageOpener.openNewStage;
 
@@ -29,10 +30,10 @@ public class BankAccountWindowController {
     private Button createReportButton;
 
     @FXML
-    private ChoiceBox<?> incomeTransactionChoiceBox;
+    private ChoiceBox<String> incomeTransactionChoiceBox;
 
     @FXML
-    private ChoiceBox<?> incomeTransactionByDateChoiceBox;
+    private ChoiceBox<String> incomeTransactionByDateChoiceBox;
 
     @FXML
     private TextField inputAmountIncomeTransaction;
@@ -59,7 +60,7 @@ public class BankAccountWindowController {
     private ScrollPane scrollPane;
 
     @FXML
-    private ChoiceBox<?> spendingTransactionChoiceBox;
+    private ChoiceBox<String> spendingTransactionChoiceBox;
 
     @FXML
     void addTransactionCategory(ActionEvent event) {
@@ -68,6 +69,7 @@ public class BankAccountWindowController {
 
     @FXML
     void backToAllBankAccounts(ActionEvent event) {
+        dropCurrentBankAccount();
         closeWindow(backToAllBankAccountsButton);
 
         String file = "main-window-view.fxml";

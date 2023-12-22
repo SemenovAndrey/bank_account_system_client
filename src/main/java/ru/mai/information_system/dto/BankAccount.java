@@ -1,6 +1,8 @@
 package ru.mai.information_system.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BankAccount {
 
@@ -28,6 +30,15 @@ public class BankAccount {
         this.bankAccountTypeId = bankAccountTypeId;
         this.creationDate = LocalDate.now().toString();
         this.balance = 0;
+    }
+
+    public BankAccount(int id, String name, int userId, int bankAccountTypeId, String creationDate, double balance) {
+        this.id = id;
+        this.name = name;
+        this.userId = userId;
+        this.bankAccountTypeId = bankAccountTypeId;
+        this.creationDate = creationDate;
+        this.balance = balance;
     }
 
     public int getId() {
@@ -88,5 +99,26 @@ public class BankAccount {
                 ", creationDate='" + creationDate + '\'' +
                 ", balance=" + balance +
                 '}';
+    }
+
+    public static List<BankAccount> getBankAccounts(String response) {
+        List<BankAccount> bankAccounts = new ArrayList<>();
+
+        response = response.replace("[", "").replace("]", "")
+                .replace("{", "");
+        response = response.substring(14, response.length() - 1);
+        String[] strBankAccounts = response.split("}, BankAccountDTO");
+        for (String bankAccount : strBankAccounts) {
+            String[] bankAccountArr = bankAccount.split(", ");
+            int id = Integer.parseInt(bankAccountArr[0].split("=")[1]);
+            String name = bankAccountArr[1].split("=")[1];
+            int userId = Integer.parseInt(bankAccountArr[2].split("=")[1]);
+            int bankAccountTypeId = Integer.parseInt(bankAccountArr[3].split("=")[1]);
+            String date = bankAccountArr[4].split("=")[1];
+            double balance = Double.parseDouble(bankAccountArr[5].split("=")[1]);
+            bankAccounts.add(new BankAccount(id, name, userId, bankAccountTypeId, date, balance));
+        }
+
+        return bankAccounts;
     }
 }

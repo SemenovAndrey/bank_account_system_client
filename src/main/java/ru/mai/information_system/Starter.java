@@ -3,6 +3,7 @@ package ru.mai.information_system;
 import com.google.gson.Gson;
 import ru.mai.information_system.communication.Communication;
 import ru.mai.information_system.communication.Url;
+import ru.mai.information_system.dto.BankAccount;
 import ru.mai.information_system.dto.BankAccountTypes;
 import ru.mai.information_system.dto.User;
 
@@ -17,8 +18,13 @@ public class Starter {
     }
 
     private static void test() {
-        String url = Url.getUsersUrl();
+        String url = Url.getBankAccountsUrl();
 
+//        try {
+//            System.out.println(BankAccount.getBankAccounts(Communication.sendGetRequest(url)));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 //
 //        try {
 //            System.out.println("GET: " + communication.sendGetRequest(url));

@@ -9,10 +9,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ru.mai.information_system.dto.BankAccount;
+import ru.mai.information_system.dto.User;
 
 import java.io.IOException;
 
 public class App extends Application {
+
+    private static User currentUser = null;
+    private static BankAccount currentBankAccount = null;
 
     @Override
     public void start(Stage stage) {
@@ -46,5 +51,29 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
+    }
+
+    public static void setCurrentUser(User user) {
+        currentUser = user;
+    }
+
+    public static void setCurrentBankAccount(BankAccount bankAccount) {
+        currentBankAccount = bankAccount;
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static BankAccount getCurrentBankAccount() {
+        return currentBankAccount;
+    }
+
+    public static void dropCurrentUser() {
+        currentUser = null;
+    }
+
+    public static void dropCurrentBankAccount() {
+        currentBankAccount = null;
     }
 }

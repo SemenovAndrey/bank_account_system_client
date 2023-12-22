@@ -1,20 +1,22 @@
 package ru.mai.information_system.controller;
 
+import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import ru.mai.information_system.communication.Communication;
 import ru.mai.information_system.communication.Url;
+import ru.mai.information_system.dto.BankAccount;
 import ru.mai.information_system.dto.BankAccountTypes;
 
 import java.io.IOException;
 
+import static ru.mai.information_system.App.getCurrentUser;
 import static ru.mai.information_system.controller.NewStageOpener.closeWindow;
 
 public class BankAccountCreatorController {
 
+//    private MainWindowController mainWindowController;
     private KeyValuePair[] keyValuePairs;
 
     @FXML
@@ -27,6 +29,8 @@ public class BankAccountCreatorController {
     private Button createBankAccountButton;
 
     public void initialize() {
+//        mainWindowController = new MainWindowController();
+
         try {
             String[] bankAccountTypes = BankAccountTypes.getBankAccountTypes(Communication
                     .sendGetRequest(Url.getBankAccountTypesUrl()));
@@ -64,16 +68,22 @@ public class BankAccountCreatorController {
             }
         }
 
-//        BankAccount bankAccount = new BankAccount(bankAccountName, userId, bankAccountCategoryId);
-//        try {
-//            String strBankAccount = Communication.sendPostRequest(Url.getBankAccountsUrl(), new Gson().toJson(bankAccount));
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        }
+        BankAccount bankAccount = new BankAccount(bankAccountName, getCurrentUser().getId(), bankAccountCategoryId);
+//        addBankAccountOnWindow(bankAccount, createBankAccountButton);
+        try {
+            String strBankAccount = Communication.sendPostRequest(Url.getBankAccountsUrl(),
+                    new Gson().toJson(bankAccount));
+            System.out.println(strBankAccount);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
 
         closeWindow(createBankAccountButton);
-        // возможно открывать и закрывать основное окно, чтобы всё подгрузилось из бд
     }
+
+//    public MainWindowController getMainWindowController() {
+//        return mainWindowController;
+//    }
 }
 
 class KeyValuePair {

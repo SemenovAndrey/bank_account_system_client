@@ -8,8 +8,10 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import ru.mai.information_system.App;
 import ru.mai.information_system.communication.Communication;
 import ru.mai.information_system.communication.Url;
+import ru.mai.information_system.dto.TransactionCategory;
 import ru.mai.information_system.dto.User;
 
 import java.io.IOException;
@@ -84,6 +86,8 @@ public class AuthorizationController {
                 return;
             }
 
+            App.setCurrentUser(user);
+
             closeWindow(buttonEnter);
             String file = "main-window-view.fxml";
             openNewStage(file);
@@ -121,6 +125,27 @@ public class AuthorizationController {
             User newUser = new User(name, email, password);
             String response = Communication.sendPostRequest(Url.getUsersUrl(), new Gson().toJson(newUser));
             System.out.println(response);
+
+            App.setCurrentUser(User.convertFromString(Communication.sendGetRequest(Url.getUsersUrl() + "/email/"
+                    + newUser.getEmail())));
+
+            TransactionCategory transactionCategory1 = new TransactionCategory(App.getCurrentUser().getId(),
+                    true, "Зарплата");
+            String response1 = Communication.sendPostRequest(Url.getTransactionCategoriesUrl(),
+                    new Gson().toJson(transactionCategory1));
+            System.out.println(response1);
+
+            TransactionCategory transactionCategory2 = new TransactionCategory(App.getCurrentUser().getId(),
+                    false, "Продукты");
+            String response2 = Communication.sendPostRequest(Url.getTransactionCategoriesUrl(),
+                    new Gson().toJson(transactionCategory2));
+            System.out.println(response2);
+
+            TransactionCategory transactionCategory3 = new TransactionCategory(App.getCurrentUser().getId(),
+                    false, "Развлечения");
+            String response3 = Communication.sendPostRequest(Url.getTransactionCategoriesUrl(),
+                    new Gson().toJson(transactionCategory3));
+            System.out.println(response3);
 
             closeWindow(buttonRegistration);
             String file = "main-window-view.fxml";
