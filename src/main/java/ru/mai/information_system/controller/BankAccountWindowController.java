@@ -389,7 +389,7 @@ public class BankAccountWindowController {
         inputDateIncomeTransactionByDate.clear();
         updateWindow();
 
-        response = "Транзакция на " + date + " добавлена";
+        response = "Транзакция на " + date.replace("-", ".") + " добавлена";
         openResponseStage(true, response);
     }
 
