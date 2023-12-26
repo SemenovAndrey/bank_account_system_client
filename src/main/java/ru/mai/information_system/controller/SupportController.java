@@ -38,10 +38,26 @@ public class SupportController {
             openResponseStage(false, response);
             System.out.println("Field email empty");
             return;
-        } else if (message.isEmpty()) {
+        }
+
+        if (message.isEmpty()) {
             response = "Сообщение не указано";
             openResponseStage(false, response);
             System.out.println("Field message empty");
+            return;
+        }
+
+        if (email.length() > 50) {
+            response = "Поле почты слишком длинное";
+            openResponseStage(false, response);
+            System.out.println("Field email too long");
+            return;
+        }
+
+        if (message.length() > 150) {
+            response = "Сообщение слишком длинное";
+            openResponseStage(false, response);
+            System.out.println("Field message too long");
             return;
         }
 

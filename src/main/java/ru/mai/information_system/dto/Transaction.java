@@ -112,7 +112,6 @@ public class Transaction {
     }
 
     public static List<Transaction> getTransactionsList(String response) {
-        System.out.println(response);
         if (response.equals("[]")) {
             return null;
         }

@@ -68,6 +68,13 @@ public class BankAccountCreatorController {
             return;
         }
 
+        if (bankAccountName.length() > 30) {
+            response = "Название счета слишком длинное";
+            openResponseStage(false, response);
+            System.out.println("Bank account name too long");
+            return;
+        }
+
         int bankAccountCategoryId = 0;
         for (KeyValuePair keyValuePair : keyValuePairs) {
             if (keyValuePair.getValue().equals(bankAccountCategory)) {

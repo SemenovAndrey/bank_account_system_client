@@ -64,6 +64,13 @@ public class AddTransactionCategoryController {
             return;
         }
 
+        if (categoryName.length() > 30) {
+            response = "Название категории слишком длинное";
+            openResponseStage(false, response);
+            System.out.println("Transaction category name too long");
+            return;
+        }
+
         TransactionCategory transactionCategory = new TransactionCategory(App.getCurrentUser().getId(),
                 categoryType, categoryName);
 
@@ -81,5 +88,6 @@ public class AddTransactionCategoryController {
 
         bankAccountWindowController.updateWindow();
         closeWindow(addTransactionCategoryButton);
+        openResponseStage(true, "Категория успешно создана");
     }
 }
