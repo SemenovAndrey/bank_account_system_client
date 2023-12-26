@@ -7,27 +7,24 @@ public class TransactionByDate {
     private double amount;
     private int transactionCategoryId;
     private String transactionDate;
-    private String comment;
 
     public TransactionByDate() {}
 
     public TransactionByDate(int bankAccountId, double amount, int transactionCategoryId,
-                             String transactionDate, String comment) {
+                             String transactionDate) {
         this.bankAccountId = bankAccountId;
         this.amount = amount;
         this.transactionCategoryId = transactionCategoryId;
         this.transactionDate = transactionDate;
-        this.comment = comment;
     }
 
     public TransactionByDate(int id, int bankAccountId, double amount, int transactionCategoryId,
-                             String transactionDate, String comment) {
+                             String transactionDate) {
         this.id = id;
         this.bankAccountId = bankAccountId;
         this.amount = amount;
         this.transactionCategoryId = transactionCategoryId;
         this.transactionDate = transactionDate;
-        this.comment = comment;
     }
 
     public int getId() {
@@ -70,14 +67,6 @@ public class TransactionByDate {
         this.transactionDate = transactionDate;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     @Override
     public String toString() {
         return "TransactionByDate{" +
@@ -86,7 +75,6 @@ public class TransactionByDate {
                 ", amount=" + amount +
                 ", transactionCategoryId=" + transactionCategoryId +
                 ", transactionDate='" + transactionDate + '\'' +
-                ", comment='" + comment + '\'' +
                 '}';
     }
 }

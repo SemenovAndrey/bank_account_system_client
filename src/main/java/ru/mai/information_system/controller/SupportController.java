@@ -3,13 +3,9 @@ package ru.mai.information_system.controller;
 import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import ru.mai.information_system.App;
 import ru.mai.information_system.communication.Communication;
 import ru.mai.information_system.communication.Url;
 import ru.mai.information_system.dto.Support;
@@ -17,6 +13,7 @@ import ru.mai.information_system.dto.Support;
 import java.io.IOException;
 
 import static ru.mai.information_system.controller.NewStageOpener.closeWindow;
+import static ru.mai.information_system.controller.NewStageOpener.openResponseStage;
 
 public class SupportController {
 
@@ -34,20 +31,29 @@ public class SupportController {
         String email = emailInput.getText();
         String message = messageInput.getText();
 
+        String response;
+
         if (email.isEmpty()) {
-            System.out.println("Email field empty");
+            response = "Почта не указана";
+            openResponseStage(false, response);
+            System.out.println("Field email empty");
             return;
         } else if (message.isEmpty()) {
-            System.out.println("Message field empty");
+            response = "Сообщение не указано";
+            openResponseStage(false, response);
+            System.out.println("Field message empty");
             return;
         }
 
         Support support = new Support(email, message);
         try {
-            String response = Communication.sendPostRequest(Url.getSupportUrl(), new Gson().toJson(support));
-            System.out.println(response);
+            String responseFromServer = Communication.sendPostRequest(Url.getSupportUrl(), new Gson().toJson(support));
+            System.out.println(responseFromServer);
         } catch (IOException e) {
+            response = "Ошибка сервера";
+            openResponseStage(false, response);
             System.out.println(e.getMessage());
+            return;
         }
 
         closeWindow(buttonSendMessage);

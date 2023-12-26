@@ -13,10 +13,11 @@ import java.io.IOException;
 
 import static ru.mai.information_system.App.getCurrentUser;
 import static ru.mai.information_system.controller.NewStageOpener.closeWindow;
+import static ru.mai.information_system.controller.NewStageOpener.openResponseStage;
 
 public class BankAccountCreatorController {
 
-//    private MainWindowController mainWindowController;
+    private MainWindowController mainWindowController;
     private KeyValuePair[] keyValuePairs;
 
     @FXML
@@ -29,7 +30,7 @@ public class BankAccountCreatorController {
     private Button createBankAccountButton;
 
     public void initialize() {
-//        mainWindowController = new MainWindowController();
+        mainWindowController = MainWindowController.getMainWindowController();
 
         try {
             String[] bankAccountTypes = BankAccountTypes.getBankAccountTypes(Communication
@@ -41,6 +42,8 @@ public class BankAccountCreatorController {
                 keyValuePairs[i] = new KeyValuePair(((i + 1) + ""), bankAccountTypes[i]);
             }
         } catch (IOException e) {
+            String response = "Ошибка сервера";
+            openResponseStage(false, response);
             System.out.println(e.getMessage());
         }
     }
@@ -50,12 +53,17 @@ public class BankAccountCreatorController {
         String bankAccountName = bankAccountNameInput.getText();
         String bankAccountCategory = categoryChoiceBox.getValue();
 
+        String response;
         if (bankAccountName.isEmpty()) {
+            response = "Введите название счета";
+            openResponseStage(false, response);
             System.out.println("Bank account name field empty");
             return;
         }
 
-        if (bankAccountCategory.isEmpty()) {
+        if (bankAccountCategory == null) {
+            response = "Выберите категорию счета";
+            openResponseStage(false, response);
             System.out.println("Bank account type field empty");
             return;
         }
@@ -69,46 +77,25 @@ public class BankAccountCreatorController {
         }
 
         BankAccount bankAccount = new BankAccount(bankAccountName, getCurrentUser().getId(), bankAccountCategoryId);
-//        addBankAccountOnWindow(bankAccount, createBankAccountButton);
         try {
-            String strBankAccount = Communication.sendPostRequest(Url.getBankAccountsUrl(),
+            String responseFromServer = Communication.sendPostRequest(Url.getBankAccountsUrl(),
                     new Gson().toJson(bankAccount));
-            System.out.println(strBankAccount);
+            System.out.println(responseFromServer);
+
+            if (responseFromServer.equals("Bank account with this name already created")) {
+                response = "Введенное название уже используется";
+                openResponseStage(false, response);
+                return;
+            }
         } catch (IOException e) {
+            response = "Ошибка сервера";
+            openResponseStage(false, response);
             System.out.println(e.getMessage());
+            return;
         }
 
         closeWindow(createBankAccountButton);
-    }
-
-//    public MainWindowController getMainWindowController() {
-//        return mainWindowController;
-//    }
-}
-
-class KeyValuePair {
-
-    private String key;
-    private String value;
-
-    public KeyValuePair(String key, String value) {
-        this.key = key;
-        this.value = value;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
+        mainWindowController.clearBankAccounts();
+        mainWindowController.initialize();
     }
 }

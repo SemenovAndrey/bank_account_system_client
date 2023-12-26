@@ -22,8 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static ru.mai.information_system.App.dropCurrentUser;
-import static ru.mai.information_system.controller.NewStageOpener.closeWindow;
-import static ru.mai.information_system.controller.NewStageOpener.openNewStage;
+import static ru.mai.information_system.controller.NewStageOpener.*;
 
 public class MainWindowController {
 
@@ -79,8 +78,11 @@ public class MainWindowController {
 
         String response;
         try {
-            response = Communication.sendGetRequest(Url.getBankAccountsUrl());
+            response = Communication
+                    .sendGetRequest(Url.getBankAccountsUrl() + "/userId/" + App.getCurrentUser().getId());
         } catch (IOException e) {
+            response = "Ошибка сервера";
+            openResponseStage(false, response);
             System.out.println(e.getMessage());
             return;
         }
@@ -89,46 +91,80 @@ public class MainWindowController {
             return;
         }
 
-        try {
-            List<BankAccount> bankAccounts = BankAccount.getBankAccounts(Communication
-                    .sendGetRequest(Url.getBankAccountsUrl()));
-
+        List<BankAccount> bankAccounts = BankAccount.getBankAccounts(response);
+        if (bankAccounts != null) {
             for (BankAccount bankAccount : bankAccounts) {
                 addBankAccountOnWindow(bankAccount, addBankAccountButton);
             }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
         }
     }
 
-    private void addBankAccountOnWindow(BankAccount bankAccount, Button button) {
+    public void addBankAccountOnWindow(BankAccount bankAccount, Button button) {
         Label labelName = new Label("Счет: ");
+        labelName.setPrefWidth(80);
         labelName.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 
         Hyperlink hyperlinkName = new Hyperlink(bankAccount.getName());
+        hyperlinkName.setPrefWidth(400);
         hyperlinkName.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         hyperlinkName.setOnAction(actionEvent -> {
             closeWindow(button);
             App.setCurrentBankAccount(bankAccount);
             String newFile = "bank-account-window-view.fxml";
-            String newTitle = "счет " + hyperlinkName.toString();
+            String newTitle = "счет '" + hyperlinkName.getText() + "'";
             openNewStage(newFile, newTitle);
         });
 
-        HBox hBox = new HBox(labelName, hyperlinkName);
+        HBox hBox1 = new HBox(labelName, hyperlinkName);
+        hBox1.setAlignment(Pos.CENTER_LEFT);
+
+        Button buttonDelete = new Button("x");
+        buttonDelete.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        buttonDelete.setOnAction(actionEvent -> {
+            String response;
+            try {
+                response = Communication.sendDeleteRequest(Url.getBankAccountsUrl() + "/" + bankAccount.getId());
+                System.out.println(response);
+            } catch (IOException e) {
+                response = "Ошибка сервера";
+                openResponseStage(false, response);
+                System.out.println(e.getMessage());
+                return;
+            }
+
+            clearBankAccounts();
+            try {
+                List<BankAccount> bankAccounts = BankAccount.getBankAccounts(Communication
+                        .sendGetRequest(Url.getBankAccountsUrl() + "/userId/" + App.getCurrentUser().getId()));
+
+                if (bankAccounts == null) {
+                    return;
+                }
+
+                for (BankAccount bankAccountForAdd : bankAccounts) {
+                    addBankAccountOnWindow(bankAccountForAdd, addBankAccountButton);
+                }
+            } catch (IOException e) {
+                response = "Ошибка сервера";
+                openResponseStage(false, response);
+                System.out.println(e.getMessage());
+            }
+        });
+
+        HBox hBox = new HBox(hBox1, buttonDelete);
         hBox.setAlignment(Pos.CENTER_LEFT);
 
         Label labelBalance = new Label(String.valueOf(bankAccount.getBalance()));
         labelBalance.setFont(Font.font("Arial", 14));
 
         VBox vBox = new VBox(hBox, labelBalance);
-        vBox.setStyle("-fx-border-color: black; -fx-border-width: 1px; -fx-padding: 10px; -fx-spacing: 5px;");
+        vBox.setStyle("-fx-padding: 10px; -fx-spacing: 5px;");
 
         vBoxBankAccountsField.getChildren().add(vBox);
     }
 
-    public VBox getvBoxBankAccountsField() {
-        return vBoxBankAccountsField;
+    public void clearBankAccounts() {
+        vBoxBankAccountsField.getChildren().clear();
     }
 
     public static MainWindowController getMainWindowController() {

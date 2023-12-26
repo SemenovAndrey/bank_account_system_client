@@ -15,8 +15,11 @@ import ru.mai.information_system.dto.TransactionCategory;
 import java.io.IOException;
 
 import static ru.mai.information_system.controller.NewStageOpener.closeWindow;
+import static ru.mai.information_system.controller.NewStageOpener.openResponseStage;
 
 public class AddTransactionCategoryController {
+
+    private BankAccountWindowController bankAccountWindowController;
 
     @FXML
     private Button addTransactionCategoryButton;
@@ -31,6 +34,8 @@ public class AddTransactionCategoryController {
     private RadioButton spendingCategoryRB;
 
     public void initialize() {
+        bankAccountWindowController = BankAccountWindowController.getBankAccountWindowController();
+
         ToggleGroup toggleGroup = new ToggleGroup();
         incomeCategoryRB.setToggleGroup(toggleGroup);
         spendingCategoryRB.setToggleGroup(toggleGroup);
@@ -38,29 +43,43 @@ public class AddTransactionCategoryController {
 
     @FXML
     void addTransactionCategory(ActionEvent event) {
+        String response;
         boolean categoryType;
         if (incomeCategoryRB.isSelected()) {
             categoryType = true;
         } else if (spendingCategoryRB.isSelected()) {
             categoryType = false;
         } else {
+            response = "Выберите тип транзакции";
+            openResponseStage(false, response);
             System.out.println("Category type didn't choose");
             return;
         }
+
         String categoryName = categoryNameInput.getText();
+        if (categoryName.isEmpty()) {
+            response = "Введите название для транзакции";
+            openResponseStage(false, response);
+            System.out.println("Category name field empty");
+            return;
+        }
+
         TransactionCategory transactionCategory = new TransactionCategory(App.getCurrentUser().getId(),
                 categoryType, categoryName);
 
-        String response;
         try {
             response = Communication.sendPostRequest(Url.getTransactionCategoriesUrl(),
                     new Gson().toJson(transactionCategory));
+
+            System.out.println(response);
         } catch (IOException e) {
+            response = "Ошибка сервера";
+            openResponseStage(false, response);
             System.out.println(e.getMessage());
             return;
         }
 
-        System.out.println(response);
+        bankAccountWindowController.updateWindow();
         closeWindow(addTransactionCategoryButton);
     }
 }

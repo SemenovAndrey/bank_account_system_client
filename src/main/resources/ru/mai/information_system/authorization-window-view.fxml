@@ -34,6 +34,8 @@
                                 <Font size="16.0" />
                             </font>
                         </Label>
+                        <TextField fx:id="emailInputAuthorization" layoutX="80.0" layoutY="105.0" prefHeight="26.0" prefWidth="441.0" promptText="email@gmail.com" />
+                        <PasswordField fx:id="passwordInputAuthorization" layoutX="80.0" layoutY="190.0" prefHeight="26.0" prefWidth="441.0" promptText="password" />
                         <Button fx:id="buttonEnter" layoutX="269.0" layoutY="266.0" mnemonicParsing="false" onAction="#enter" text="Войти">
                             <font>
                                 <Font size="15.0" />
@@ -44,8 +46,6 @@
                                 <Font size="14.0" />
                             </font>
                         </Button>
-                        <TextField fx:id="emailInputAuthorization" layoutX="80.0" layoutY="105.0" prefHeight="26.0" prefWidth="441.0" promptText="email@gmail.com" />
-                        <PasswordField fx:id="passwordInputAuthorization" layoutX="80.0" layoutY="190.0" prefHeight="26.0" prefWidth="441.0" promptText="password" />
                     </children>
                 </AnchorPane>
             </content>
@@ -69,6 +69,14 @@
                                 <Font size="16.0" />
                             </font>
                         </Label>
+                        <TextField fx:id="nameInputRegistration" layoutX="80.0" layoutY="90.0" prefHeight="26.0" prefWidth="441.0" promptText="Ivan" />
+                        <TextField fx:id="emailInputRegistration" layoutX="80.0" layoutY="165.0" prefHeight="26.0" prefWidth="441.0" promptText="email@gmail.com" />
+                        <Label layoutX="80.0" layoutY="60.0" text="Имя">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <PasswordField fx:id="passwordInputRegistration" layoutX="80.0" layoutY="230.0" prefHeight="26.0" prefWidth="441.0" promptText="password" />
                         <Button fx:id="buttonRegistration" layoutX="220.0" layoutY="279.0" mnemonicParsing="false" onAction="#register" text="Зарегистрироваться">
                             <font>
                                 <Font size="15.0" />
@@ -79,14 +87,6 @@
                                 <Font size="14.0" />
                             </font>
                         </Button>
-                        <TextField fx:id="emailInputRegistration" layoutX="80.0" layoutY="165.0" prefHeight="26.0" prefWidth="441.0" promptText="email@gmail.com" />
-                        <Label layoutX="80.0" layoutY="60.0" text="Имя">
-                            <font>
-                                <Font size="16.0" />
-                            </font>
-                        </Label>
-                        <TextField fx:id="nameInputRegistration" layoutX="80.0" layoutY="90.0" prefHeight="26.0" prefWidth="441.0" promptText="Ivan" />
-                        <PasswordField fx:id="passwordInputRegistration" layoutX="80.0" layoutY="230.0" prefHeight="26.0" prefWidth="441.0" promptText="password" />
                     </children>
                 </AnchorPane>
             </content>

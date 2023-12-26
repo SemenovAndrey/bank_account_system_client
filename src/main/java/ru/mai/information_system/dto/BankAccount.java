@@ -93,15 +93,24 @@ public class BankAccount {
     public String toString() {
         return "BankAccount{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name=" + name +
                 ", userId=" + userId +
                 ", bankAccountTypeId=" + bankAccountTypeId +
-                ", creationDate='" + creationDate + '\'' +
+                ", creationDate=" + creationDate +
                 ", balance=" + balance +
                 '}';
     }
 
+    public String toJson() {
+        return "{id=" + this.id + ", name=" + this.name + ", userId=" + this.userId + ", bankAccountTypeId="
+                + this.bankAccountTypeId + ", creationDate=" + this.creationDate + ", balance=" + this.balance + "}";
+    }
+
     public static List<BankAccount> getBankAccounts(String response) {
+        if (response.equals("[]")) {
+            return null;
+        }
+
         List<BankAccount> bankAccounts = new ArrayList<>();
 
         response = response.replace("[", "").replace("]", "")
@@ -120,5 +129,13 @@ public class BankAccount {
         }
 
         return bankAccounts;
+    }
+
+    public void updateBalance(boolean transactionType, double amount) {
+        if (transactionType) {
+            balance += amount;
+        } else {
+            balance -= amount;
+        }
     }
 }

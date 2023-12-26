@@ -1,5 +1,9 @@
 package ru.mai.information_system.dto;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Transaction {
 
     private int id;
@@ -7,27 +11,31 @@ public class Transaction {
     private double amount;
     private int transactionCategoryId;
     private String transactionDate;
-    private String comment;
 
     public Transaction() {}
 
-    public Transaction(int bankAccountId, double amount, int transactionCategoryId,
-                       String transactionDate, String comment) {
+    public Transaction(int bankAccountId, double amount, int transactionCategoryId) {
         this.bankAccountId = bankAccountId;
         this.amount = amount;
         this.transactionCategoryId = transactionCategoryId;
-        this.transactionDate = transactionDate;
-        this.comment = comment;
+        this.transactionDate = String.valueOf(LocalDate.now());
+    }
+
+    public Transaction(int id, int bankAccountId, double amount, int transactionCategoryId) {
+        this.id = id;
+        this.bankAccountId = bankAccountId;
+        this.amount = amount;
+        this.transactionCategoryId = transactionCategoryId;
+        this.transactionDate = String.valueOf(LocalDate.now());
     }
 
     public Transaction(int id, int bankAccountId, double amount, int transactionCategoryId,
-                       String transactionDate, String comment) {
+                       String transactionDate) {
         this.id = id;
         this.bankAccountId = bankAccountId;
         this.amount = amount;
         this.transactionCategoryId = transactionCategoryId;
         this.transactionDate = transactionDate;
-        this.comment = comment;
     }
 
     public int getId() {
@@ -70,14 +78,6 @@ public class Transaction {
         this.transactionDate = transactionDate;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
     @Override
     public String toString() {
         return "Transaction{" +
@@ -86,7 +86,53 @@ public class Transaction {
                 ", amount=" + amount +
                 ", transactionCategoryId=" + transactionCategoryId +
                 ", transactionDate='" + transactionDate + '\'' +
-                ", comment='" + comment + '\'' +
                 '}';
+    }
+
+    public static Transaction convertFromString(String response) {
+        if (!response.startsWith("Transaction")) {
+            return null;
+        }
+
+        if (!Character.toString(response.charAt(14)).equals("{")) {
+            return null;
+        }
+
+        response = response.replace("TransactionDTO", "").replace("{", "")
+                .replace("}", "").replace("'", "");
+
+        String[] info = response.split(", ");
+        int id = Integer.parseInt(info[0].split("=")[1]);
+        int bankAccountId = Integer.parseInt(info[1].split("=")[1]);
+        double amount = Double.parseDouble(info[2].split("=")[1]);
+        int transactionCategoryId = Integer.parseInt(info[3].split("=")[1]);
+        String transactionDate = info[4].split("=")[1];
+
+        return new Transaction(id, bankAccountId, amount, transactionCategoryId, transactionDate);
+    }
+
+    public static List<Transaction> getTransactionsList(String response) {
+        System.out.println(response);
+        if (response.equals("[]")) {
+            return null;
+        }
+
+        List<Transaction> transactions = new ArrayList<>();
+
+        response = response.replace("TransactionDTO", "").replace("[", "")
+                .replace("]", "").replace("{", "").replace("'", "");
+        response = response.substring(0, response.length() - 1);
+        String[] strTransactions = response.split("}, ");
+        for (String transaction : strTransactions) {
+            String[] transactionArr = transaction.split(", ");
+            int id = Integer.parseInt(transactionArr[0].split("=")[1]);
+            int bankAccountId = Integer.parseInt(transactionArr[1].split("=")[1]);
+            double amount = Double.parseDouble(transactionArr[2].split("=")[1]);
+            int transactionCategoryId = Integer.parseInt(transactionArr[3].split("=")[1]);
+            String transactionDate = transactionArr[4].split("=")[1];
+            transactions.add(new Transaction(id, bankAccountId, amount, transactionCategoryId, transactionDate));
+        }
+
+        return transactions;
     }
 }

@@ -3,11 +3,10 @@ package ru.mai.information_system;
 import com.google.gson.Gson;
 import ru.mai.information_system.communication.Communication;
 import ru.mai.information_system.communication.Url;
-import ru.mai.information_system.dto.BankAccount;
-import ru.mai.information_system.dto.BankAccountTypes;
-import ru.mai.information_system.dto.User;
+import ru.mai.information_system.dto.*;
 
 import java.io.IOException;
+import java.util.List;
 
 public class Starter {
 
@@ -18,13 +17,14 @@ public class Starter {
     }
 
     private static void test() {
-        String url = Url.getBankAccountsUrl();
+        String url = Url.getTransactionsUrl() + "/bankAccountId/1";
 
-//        try {
-//            System.out.println(BankAccount.getBankAccounts(Communication.sendGetRequest(url)));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            List<Transaction> transactions = Transaction.getTransactionsList(Communication.sendGetRequest(url));
+            System.out.println(transactions);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //
 //        try {
 //            System.out.println("GET: " + communication.sendGetRequest(url));

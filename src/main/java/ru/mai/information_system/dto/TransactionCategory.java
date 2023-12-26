@@ -1,5 +1,8 @@
 package ru.mai.information_system.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TransactionCategory {
 
     private int id;
@@ -62,5 +65,50 @@ public class TransactionCategory {
                 ", type=" + type +
                 ", category='" + category + '\'' +
                 '}';
+    }
+
+    public static List<TransactionCategory> getTransactionCategoriesList(String response) {
+        if (response == null || response.equals("[]")) {
+            return null;
+        }
+
+        List<TransactionCategory> transactionCategories = new ArrayList<>();
+
+        response = response.replace("[", "").replace("]", "")
+                .replace("{", "").replace("'", "");
+        response = response.substring(22, response.length() - 1);
+        String[] transactionCategoriesStr = response.split("}, TransactionCategoryDTO");
+
+        for (int i = 0; i < transactionCategoriesStr.length; i++) {
+            String[] transactionCategoryStr = transactionCategoriesStr[i].split(", ");
+            int id = Integer.parseInt(transactionCategoryStr[0].split("=")[1]);
+            int userId = Integer.parseInt(transactionCategoryStr[1].split("=")[1]);
+            boolean type = transactionCategoryStr[2].split("=")[1].equals("true");
+            String category = transactionCategoryStr[3].split("=")[1];
+            transactionCategories.add(new TransactionCategory(id, userId, type, category));
+        }
+
+        return transactionCategories;
+    }
+
+    public static TransactionCategory convertFromString(String response) {
+        if (!response.startsWith("TransactionCategory")) {
+            return null;
+        }
+
+        if (!Character.toString(response.charAt(22)).equals("{")) {
+            return null;
+        }
+
+        response = response.replace("TransactionCategoryDTO", "").replace("{", "")
+                .replace("}", "").replace("'", "");
+
+        String[] info = response.split(", ");
+        int id = Integer.parseInt(info[0].split("=")[1]);
+        int userId = Integer.parseInt(info[1].split("=")[1]);
+        boolean type = info[2].split("=")[1].equals("true");
+        String category = info[3].split("=")[1];
+
+        return new TransactionCategory(id, userId, type, category);
     }
 }

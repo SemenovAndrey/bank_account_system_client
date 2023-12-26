@@ -8,10 +8,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
 
+<?import javafx.geometry.Insets?>
 <SplitPane dividerPositions="0.49999999999999994" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
            minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19"
            xmlns:fx="http://javafx.com/fxml/1"
@@ -64,7 +66,7 @@
                 <TextField fx:id="inputAmountIncomeTransactionByDate" layoutX="45.0" layoutY="380.0" promptText="Введите сумму" />
                 <ChoiceBox fx:id="incomeTransactionByDateChoiceBox" layoutX="220.0" layoutY="380.0" prefWidth="150.0" />
                 <Button fx:id="saveIncomeTransactionByDateButton" layoutX="45.0" layoutY="450.0" mnemonicParsing="false" onAction="#saveIncomeTransactionByDate" text="Сохранить" />
-                <TextField fx:id="inputDateIncomeTransactionByDate" layoutX="45.0" layoutY="415.0" promptText="Введите дату" />
+                <TextField fx:id="inputDateIncomeTransactionByDate" layoutX="45.0" layoutY="415.0" promptText="yyyy-mm-dd" />
                 <Line endX="296.20001220703125" layoutX="101.0" layoutY="549.0" startX="-103.80000305175781" />
                 <Button fx:id="addTransactionCategoryButton" layoutX="119.0" layoutY="495.0" mnemonicParsing="false" onAction="#addTransactionCategory" text="Добавить новую категорию" />
             </children>
@@ -85,7 +87,15 @@
                             </font>
                         </Button>
                         <Line endX="296.20001220703125" layoutX="102.0" layoutY="452.0" startX="-103.80000305175781" />
-                        <ScrollPane fx:id="scrollPane" layoutY="-1.0" prefHeight="452.0" prefWidth="400.0" />
+                        <ScrollPane fx:id="scrollPane" layoutY="-1.0" prefHeight="452.0" prefWidth="400.0">
+                            <content>
+                                <VBox fx:id="transactionsVBox" prefHeight="442.0" prefWidth="380.0" spacing="20.0">
+                                    <padding>
+                                        <Insets bottom="5.0" left="40.0" right="5.0" top="25.0" />
+                                    </padding>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
                     </children>
                 </Pane>
             </children>
