@@ -47,7 +47,6 @@ public class AuthorizationController {
 
     @FXML
     void enter(ActionEvent event) {
-
         String email = emailInputAuthorization.getText().trim();
         String password = passwordInputAuthorization.getText();
 
@@ -76,8 +75,11 @@ public class AuthorizationController {
                 return;
             }
 
-            if (!user.getPassword().equals(password)) {
-                response = "Неверный пароль";
+            user.setPassword(password);
+            String responseFromServer = Communication.sendPostRequest(Url.getUsersUrl() + "/auth",
+                    new Gson().toJson(user));
+            if (responseFromServer.equals("Authentication was unsuccessful")) {
+                response = "Пароль не верный";
                 openResponseStage(false, response);
                 System.out.println("Incorrect password");
                 return;
@@ -127,15 +129,15 @@ public class AuthorizationController {
             return;
         }
 
-        if (email.length() > 50) {
+        if (email.length() > 60) {
             response = "Максимальная длина почты 50";
             openResponseStage(false, response);
             System.out.println("Field email is too long");
             return;
         }
 
-        if (password.length() > 30) {
-            response = "Максимальная длина пароля 50";
+        if (password.length() > 50) {
+            response = "Максимальная длина пароля 30";
             openResponseStage(false, response);
             System.out.println("Field password too long");
             return;
@@ -168,16 +170,23 @@ public class AuthorizationController {
             User user = User.convertFromString(Communication
                     .sendGetRequest(Url.getUsersUrl() + "/email/" + email));
 
-            if (user != null) {
+//            if (user != null) {
+//                response = "Введённая почта уже используется";
+//                openResponseStage(false, response);
+//                System.out.println("User with this email already created");
+//                return;
+//            }
+
+            User newUser = new User(name, email, password);
+            String responseFromServer = Communication.sendPostRequest(Url.getUsersUrl() + "/register",
+                    new Gson().toJson(newUser));
+
+            if (responseFromServer.equals("User with this email already created")) {
                 response = "Введённая почта уже используется";
                 openResponseStage(false, response);
                 System.out.println("User with this email already created");
                 return;
             }
-
-            User newUser = new User(name, email, password);
-            String responseFromServer = Communication.sendPostRequest(Url.getUsersUrl(), new Gson().toJson(newUser));
-            System.out.println(responseFromServer);
 
             App.setCurrentUser(User.convertFromString(Communication
                     .sendGetRequest(Url.getUsersUrl() + "/email/" + email)));

@@ -44,6 +44,7 @@ public class AddTransactionCategoryController {
     @FXML
     void addTransactionCategory(ActionEvent event) {
         String response;
+
         boolean categoryType;
         if (incomeCategoryRB.isSelected()) {
             categoryType = true;
@@ -64,7 +65,7 @@ public class AddTransactionCategoryController {
             return;
         }
 
-        if (categoryName.length() > 30) {
+        if (categoryName.length() > 40) {
             response = "Название категории слишком длинное";
             openResponseStage(false, response);
             System.out.println("Transaction category name too long");

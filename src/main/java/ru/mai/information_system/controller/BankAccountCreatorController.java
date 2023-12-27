@@ -59,16 +59,14 @@ public class BankAccountCreatorController {
             openResponseStage(false, response);
             System.out.println("Bank account name field empty");
             return;
-        }
-
-        if (bankAccountCategory == null) {
+        } else if (bankAccountCategory == null) {
             response = "Выберите категорию счета";
             openResponseStage(false, response);
             System.out.println("Bank account type field empty");
             return;
         }
 
-        if (bankAccountName.length() > 30) {
+        if (bankAccountName.length() > 40) {
             response = "Название счета слишком длинное";
             openResponseStage(false, response);
             System.out.println("Bank account name too long");

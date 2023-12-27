@@ -38,9 +38,7 @@ public class SupportController {
             openResponseStage(false, response);
             System.out.println("Field email empty");
             return;
-        }
-
-        if (message.isEmpty()) {
+        } else if (message.isEmpty()) {
             response = "Сообщение не указано";
             openResponseStage(false, response);
             System.out.println("Field message empty");
