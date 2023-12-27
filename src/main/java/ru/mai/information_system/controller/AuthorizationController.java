@@ -40,12 +40,6 @@ public class AuthorizationController {
     private Button buttonRegistration;
 
     @FXML
-    private Button supportButtonAuth;
-
-    @FXML
-    private Button supportButtonReg;
-
-    @FXML
     void enter(ActionEvent event) {
         String email = emailInputAuthorization.getText().trim();
         String password = passwordInputAuthorization.getText();
@@ -65,19 +59,19 @@ public class AuthorizationController {
         }
 
         try {
-            User user = User.convertFromString(Communication
-                    .sendGetRequest(Url.getUsersUrl() + "/email/" + email));
+            int userId = Integer.parseInt(Communication
+                    .sendGetRequest(Url.getUsersUrl() + "/idByEmail/" + email));
 
-            if (user == null) {
+            if (userId == 0) {
                 response = "Пользователь не найден";
                 openResponseStage(false, response);
                 System.out.println("User not found");
                 return;
             }
 
-            user.setPassword(password);
+            String name = Communication.sendGetRequest(Url.getUsersUrl() + "/nameById/" + userId);
             String responseFromServer = Communication.sendPostRequest(Url.getUsersUrl() + "/auth",
-                    new Gson().toJson(user));
+                    new Gson().toJson(new User(userId, name, email, password)));
             if (responseFromServer.equals("Authentication was unsuccessful")) {
                 response = "Пароль не верный";
                 openResponseStage(false, response);
@@ -85,7 +79,8 @@ public class AuthorizationController {
                 return;
             }
 
-            App.setCurrentUser(user);
+            App.setCurrentUserId(Integer.parseInt(Communication
+                    .sendGetRequest(Url.getUsersUrl() + "/idByEmail/" + email)));
 
             closeWindow(buttonEnter);
             String file = "main-window-view.fxml";
@@ -167,18 +162,8 @@ public class AuthorizationController {
         }
 
         try {
-            User user = User.convertFromString(Communication
-                    .sendGetRequest(Url.getUsersUrl() + "/email/" + email));
-
-//            if (user != null) {
-//                response = "Введённая почта уже используется";
-//                openResponseStage(false, response);
-//                System.out.println("User with this email already created");
-//                return;
-//            }
-
             User newUser = new User(name, email, password);
-            String responseFromServer = Communication.sendPostRequest(Url.getUsersUrl() + "/register",
+            String responseFromServer = Communication.sendPostRequest(Url.getUsersUrl() + "/reg",
                     new Gson().toJson(newUser));
 
             if (responseFromServer.equals("User with this email already created")) {
@@ -188,23 +173,23 @@ public class AuthorizationController {
                 return;
             }
 
-            App.setCurrentUser(User.convertFromString(Communication
-                    .sendGetRequest(Url.getUsersUrl() + "/email/" + email)));
+            App.setCurrentUserId(Integer.parseInt(Communication
+                    .sendGetRequest(Url.getUsersUrl() + "/idByEmail/" + email)));
 
-            User currentUser = App.getCurrentUser();
-            TransactionCategory transactionCategory1 = new TransactionCategory(currentUser.getId(),
+            int currentUserId = App.getCurrentUserId();
+            TransactionCategory transactionCategory1 = new TransactionCategory(currentUserId,
                     true, "Зарплата");
             String response1 = Communication.sendPostRequest(Url.getTransactionCategoriesUrl(),
                     new Gson().toJson(transactionCategory1));
             System.out.println(response1);
 
-            TransactionCategory transactionCategory2 = new TransactionCategory(currentUser.getId(),
+            TransactionCategory transactionCategory2 = new TransactionCategory(currentUserId,
                     false, "Продукты");
             String response2 = Communication.sendPostRequest(Url.getTransactionCategoriesUrl(),
                     new Gson().toJson(transactionCategory2));
             System.out.println(response2);
 
-            TransactionCategory transactionCategory3 = new TransactionCategory(currentUser.getId(),
+            TransactionCategory transactionCategory3 = new TransactionCategory(currentUserId,
                     false, "Развлечения");
             String response3 = Communication.sendPostRequest(Url.getTransactionCategoriesUrl(),
                     new Gson().toJson(transactionCategory3));

@@ -11,7 +11,7 @@ import ru.mai.information_system.dto.BankAccountTypes;
 
 import java.io.IOException;
 
-import static ru.mai.information_system.App.getCurrentUser;
+import static ru.mai.information_system.App.getCurrentUserId;
 import static ru.mai.information_system.controller.NewStageOpener.closeWindow;
 import static ru.mai.information_system.controller.NewStageOpener.openResponseStage;
 
@@ -81,7 +81,7 @@ public class BankAccountCreatorController {
             }
         }
 
-        BankAccount bankAccount = new BankAccount(bankAccountName, getCurrentUser().getId(), bankAccountCategoryId);
+        BankAccount bankAccount = new BankAccount(bankAccountName, getCurrentUserId(), bankAccountCategoryId);
         try {
             String responseFromServer = Communication.sendPostRequest(Url.getBankAccountsUrl(),
                     new Gson().toJson(bankAccount));

@@ -1,5 +1,8 @@
 package ru.mai.information_system.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TransactionByDate {
 
     private int id;
@@ -76,5 +79,30 @@ public class TransactionByDate {
                 ", transactionCategoryId=" + transactionCategoryId +
                 ", transactionDate='" + transactionDate + '\'' +
                 '}';
+    }
+
+    public static List<TransactionByDate> getTransactionsBydateList(String response) {
+        if (response.equals("[]")) {
+            return null;
+        }
+
+        List<TransactionByDate> transactionsByDate = new ArrayList<>();
+
+        response = response.replace("TransactionDTO", "").replace("[", "")
+                .replace("]", "").replace("{", "").replace("'", "");
+        response = response.substring(0, response.length() - 1);
+        String[] strTransactions = response.split("}, ");
+        for (String transactionByDate : strTransactions) {
+            String[] transactionArr = transactionByDate.split(", ");
+            int id = Integer.parseInt(transactionArr[0].split("=")[1]);
+            int bankAccountId = Integer.parseInt(transactionArr[1].split("=")[1]);
+            double amount = Double.parseDouble(transactionArr[2].split("=")[1]);
+            int transactionCategoryId = Integer.parseInt(transactionArr[3].split("=")[1]);
+            String transactionDate = transactionArr[4].split("=")[1];
+            transactionsByDate.add(new TransactionByDate(id, bankAccountId, amount,
+                    transactionCategoryId, transactionDate));
+        }
+
+        return transactionsByDate;
     }
 }

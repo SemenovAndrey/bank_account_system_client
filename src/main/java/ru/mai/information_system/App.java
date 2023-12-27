@@ -10,13 +10,12 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ru.mai.information_system.dto.BankAccount;
-import ru.mai.information_system.dto.User;
 
 import java.io.IOException;
 
 public class App extends Application {
 
-    private static User currentUser = null;
+    private static int currentUserId = 0;
     private static BankAccount currentBankAccount = null;
 
     @Override
@@ -53,24 +52,24 @@ public class App extends Application {
         launch();
     }
 
-    public static void setCurrentUser(User user) {
-        currentUser = user;
+    public static void setCurrentUserId(int id) {
+        currentUserId = id;
     }
 
     public static void setCurrentBankAccount(BankAccount bankAccount) {
         currentBankAccount = bankAccount;
     }
 
-    public static User getCurrentUser() {
-        return currentUser;
+    public static int getCurrentUserId() {
+        return currentUserId;
     }
 
     public static BankAccount getCurrentBankAccount() {
         return currentBankAccount;
     }
 
-    public static void dropCurrentUser() {
-        currentUser = null;
+    public static void dropCurrentUserId() {
+        currentUserId = 0;
     }
 
     public static void dropCurrentBankAccount() {

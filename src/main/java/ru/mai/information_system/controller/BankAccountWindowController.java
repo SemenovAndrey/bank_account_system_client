@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -40,16 +39,10 @@ public class BankAccountWindowController {
     private Label accountNameLabel;
 
     @FXML
-    private Button addTransactionCategoryButton;
-
-    @FXML
     private Button backToAllBankAccountsButton;
 
     @FXML
     private Label balanceLabel;
-
-    @FXML
-    private Button createReportButton;
 
     @FXML
     private ChoiceBox<String> incomeTransactionChoiceBox;
@@ -70,18 +63,6 @@ public class BankAccountWindowController {
     private TextField inputDateIncomeTransactionByDate;
 
     @FXML
-    private Button saveIncomeTransactionButton;
-
-    @FXML
-    private Button saveIncomeTransactionByDateButton;
-
-    @FXML
-    private Button saveSpendingTransactionButton;
-
-    @FXML
-    private ScrollPane scrollPane;
-
-    @FXML
     private ChoiceBox<String> spendingTransactionChoiceBox;
 
     @FXML
@@ -97,7 +78,7 @@ public class BankAccountWindowController {
         List<TransactionCategory> transactionCategories;
         try {
             transactionCategories = TransactionCategory.getTransactionCategoriesList(Communication
-                    .sendGetRequest(Url.getTransactionCategoriesUrl() + "/userId/" + App.getCurrentUser().getId()));
+                    .sendGetRequest(Url.getTransactionCategoriesUrl() + "/userId/" + App.getCurrentUserId()));
 
             keyValuePairsIncome = new ArrayList<>();
             keyValuePairsSpending = new ArrayList<>();
@@ -142,13 +123,17 @@ public class BankAccountWindowController {
     @FXML
     void createReport(ActionEvent event) {
         try {
-            User currentUser = App.getCurrentUser();
             BankAccount currentBankAccount = App.getCurrentBankAccount();
             List<Transaction> transactions;
+            List<TransactionByDate> transactionsByDate;
             try {
                 transactions = Transaction.getTransactionsList(Communication
-                        .sendGetRequest(Url.getTransactionsUrl()
-                                + "/bankAccountId/" + currentBankAccount.getId()));
+                        .sendGetRequest(Url.getTransactionsUrl() + "/bankAccountId/"
+                        + currentBankAccount.getId()));
+
+                transactionsByDate = TransactionByDate.getTransactionsBydateList(Communication
+                        .sendGetRequest(Url.getTransactionsByDateUrl() + "/bankAccountId/"
+                        + currentBankAccount.getId()));
             } catch (IOException e) {
                 String response = "Ошибка сервера";
                 openResponseStage(false, response);
@@ -160,28 +145,40 @@ public class BankAccountWindowController {
             File file = new File(fileName);
             PrintWriter writer = new PrintWriter(file);
 
-            writer.println("Пользователь: " + currentUser.getName());
-            writer.println("Счет: " + currentBankAccount.getName());
-            writer.println("Дата создания счета: " + currentBankAccount.getCreationDate());
+            String name = Communication.sendGetRequest(Url.getUsersUrl() + "/nameById/"
+                    + App.getCurrentUserId());
+            writer.println("Пользователь: " + name);
+            writer.println("Счет: " + currentBankAccount.getName().replace("'", ""));
+            writer.println("Дата создания счета: " + currentBankAccount.getCreationDate()
+                    .replace("-", ".").replace("'", ""));
             writer.println("Баланс: " + currentBankAccount.getBalance() + "\n");
-            writer.println("Операции:");
 
-            if (transactions == null) {
-                return;
+            writer.println("Операции:");
+            if (transactions != null) {
+                for (int i = transactions.size() - 1; i > -1; i--) {
+                    Transaction transaction = transactions.get(i);
+                    String sign = getSign(transaction);
+                    String category = getCategory(transaction);
+                    String transactionText = sign + transaction.getAmount() + " (" + category + ")     "
+                            + transaction.getTransactionDate().replace("-", ".");
+                    writer.println(transactionText);
+                }
             }
 
-            for (int i = transactions.size() - 1; i > -1; i--) {
-                Transaction transaction = transactions.get(i);
-                String sign = getSign(transaction);
-                String category = getCategory(transaction);
-                String transactionText = sign + transaction.getAmount() + " (" + category + ")     "
-                        + transaction.getTransactionDate() + "\n";
-                writer.print(transactionText);
+            writer.println("\nОперации на определённую дату:");
+            if (transactionsByDate != null) {
+                for (TransactionByDate transactionByDate : transactionsByDate) {
+                    String sign = getSign(transactionByDate);
+                    String category = getCategory(transactionByDate);
+                    String transactionText = sign + transactionByDate.getAmount() + " (" + category + ")     "
+                            + transactionByDate.getTransactionDate().replace("-", ".");
+                    writer.println(transactionText);
+                }
             }
 
             String response = "Файл успешно создан";
             openResponseStage(true, response);
-            System.out.println("Файл успешно создан");
+            System.out.println("File created successfully");
 
             writer.close();
         } catch (IOException e) {
@@ -222,9 +219,10 @@ public class BankAccountWindowController {
             return;
         }
 
-        if (amount > MAX_AMOUNT) {
-            response = "Сумма должна быть меньше 1000000000";
+        if (amount <= 0 || amount >= MAX_AMOUNT) {
+            response = "Сумма должна быть больше 0";
             openResponseStage(false, response);
+            System.out.println("Amount should be more than 0");
             return;
         }
 
@@ -232,7 +230,7 @@ public class BankAccountWindowController {
         try {
             List<TransactionCategory> transactionCategories = TransactionCategory
                     .getTransactionCategoriesList(Communication.sendGetRequest(Url.getTransactionCategoriesUrl()
-                            + "/userId/" + App.getCurrentUser().getId()));
+                            + "/userId/" + App.getCurrentUserId()));
 
             for (TransactionCategory transactionCategory : transactionCategories) {
                 if (transactionCategory.getCategory().equals(category)) {
@@ -326,6 +324,13 @@ public class BankAccountWindowController {
             return;
         }
 
+        if (amount <= 0 || amount >= MAX_AMOUNT) {
+            response = "Сумма должна быть больше 0";
+            openResponseStage(false, response);
+            System.out.println("Amount should be more than 0");
+            return;
+        }
+
         LocalDate today = LocalDate.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate checkDate;
@@ -349,7 +354,7 @@ public class BankAccountWindowController {
         try {
             List<TransactionCategory> transactionCategories = TransactionCategory
                     .getTransactionCategoriesList(Communication.sendGetRequest(Url.getTransactionCategoriesUrl()
-                            + "/userId/" + App.getCurrentUser().getId()));
+                            + "/userId/" + App.getCurrentUserId()));
 
             for (TransactionCategory transactionCategory : transactionCategories) {
                 if (transactionCategory.getCategory().equals(category.substring(0, category.length() - 10))) {
@@ -424,11 +429,25 @@ public class BankAccountWindowController {
             return;
         }
 
+        if (amount <= 0 || amount >= MAX_AMOUNT) {
+            response = "Сумма должна быть больше 0";
+            openResponseStage(false, response);
+            System.out.println("Amount should be more than 0");
+            return;
+        }
+
+        if (App.getCurrentBankAccount().getBalance() - amount < 0) {
+            response = "Недостаточно денег на счете";
+            openResponseStage(false, response);
+            System.out.println("Not enough money");
+            return;
+        }
+
         int categoryId = 0;
         try {
             List<TransactionCategory> transactionCategories = TransactionCategory
                     .getTransactionCategoriesList(Communication.sendGetRequest(Url.getTransactionCategoriesUrl()
-                            + "/userId/" + App.getCurrentUser().getId()));
+                            + "/userId/" + App.getCurrentUserId()));
 
             for (TransactionCategory transactionCategory : transactionCategories) {
                 if (transactionCategory.getCategory().equals(category)) {
@@ -562,12 +581,63 @@ public class BankAccountWindowController {
         return sign;
     }
 
+    private String getSign(TransactionByDate transactionByDate) {
+        String sign;
+        String response;
+        try {
+            TransactionCategory transactionCategory = TransactionCategory.convertFromString(Communication
+                    .sendGetRequest(Url.getTransactionCategoriesUrl() + "/"
+                            + transactionByDate.getTransactionCategoryId()));
+
+            boolean type;
+            if (transactionCategory != null) {
+                type = transactionCategory.isType();
+            } else {
+                System.out.println("Category not found");
+                return null;
+            }
+
+            if (type) {
+                sign = "+";
+            } else {
+                sign = "-";
+            }
+        } catch (IOException e) {
+            response = "Ошибка сервера";
+            openResponseStage(false, response);
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        return sign;
+    }
+
     private String getCategory(Transaction transaction) {
         TransactionCategory transactionCategory;
         String response;
         try {
             transactionCategory = TransactionCategory.convertFromString(Communication
                     .sendGetRequest(Url.getTransactionCategoriesUrl() + "/" + transaction.getTransactionCategoryId()));
+        } catch (IOException e) {
+            response = "Ошибка сервера";
+            openResponseStage(false, response);
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        if (transactionCategory != null) {
+            return transactionCategory.getCategory();
+        }
+
+        return null;
+    }
+
+    private String getCategory(TransactionByDate transactionByDate) {
+        TransactionCategory transactionCategory;
+        String response;
+        try {
+            transactionCategory = TransactionCategory.convertFromString(Communication
+                    .sendGetRequest(Url.getTransactionCategoriesUrl() + "/" + transactionByDate.getTransactionCategoryId()));
         } catch (IOException e) {
             response = "Ошибка сервера";
             openResponseStage(false, response);

@@ -72,7 +72,7 @@ public class AddTransactionCategoryController {
             return;
         }
 
-        TransactionCategory transactionCategory = new TransactionCategory(App.getCurrentUser().getId(),
+        TransactionCategory transactionCategory = new TransactionCategory(App.getCurrentUserId(),
                 categoryType, categoryName);
 
         try {
