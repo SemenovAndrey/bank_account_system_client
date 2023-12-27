@@ -11,7 +11,7 @@ public class Communication {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("GET");
 
-        return sendResponse(connection);
+        return sendRequest(connection);
     }
 
     public static String sendPostRequest(String url, String data) throws IOException {
@@ -22,7 +22,7 @@ public class Communication {
 
         writeData(connection, data);
 
-        return sendResponse(connection);
+        return sendRequest(connection);
     }
 
     public static String sendPutRequest(String url, String data) throws IOException {
@@ -33,17 +33,17 @@ public class Communication {
 
         writeData(connection, data);
 
-        return sendResponse(connection);
+        return sendRequest(connection);
     }
 
     public static String sendDeleteRequest(String url) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("DELETE");
 
-        return sendResponse(connection);
+        return sendRequest(connection);
     }
 
-    private static String sendResponse(HttpURLConnection connection) throws IOException {
+    private static String sendRequest(HttpURLConnection connection) throws IOException {
         StringBuilder response = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String line;
